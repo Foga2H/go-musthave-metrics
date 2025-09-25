@@ -24,7 +24,7 @@ func updateMetrics(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if typeField != metrics.Counter && metricField != metrics.Gauge {
+	if typeField != metrics.Counter && typeField != metrics.Gauge {
 		res.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -49,7 +49,6 @@ func updateMetrics(res http.ResponseWriter, req *http.Request) {
 func notFound(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "text/plain")
 	res.WriteHeader(http.StatusNotFound)
-	return
 }
 
 func main() {
