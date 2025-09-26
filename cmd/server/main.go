@@ -5,7 +5,11 @@ import (
 	"strconv"
 
 	metrics "github.com/Foga2H/go-musthave-metrics/internal/model"
+	storageInterface "github.com/Foga2H/go-musthave-metrics/internal/storage"
+	"github.com/Foga2H/go-musthave-metrics/internal/storage/memory"
 )
+
+var storage storageInterface.Storage
 
 func updateMetrics(res http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
@@ -43,6 +47,8 @@ func updateMetrics(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	storage.Set(typeField, valueField)
+
 	res.WriteHeader(http.StatusOK)
 }
 
@@ -53,6 +59,7 @@ func notFound(res http.ResponseWriter, req *http.Request) {
 
 func main() {
 	mux := http.NewServeMux()
+	storage = memory.NewMemStorage()
 
 	mux.HandleFunc(`/update/{type}/{metric}/{value}`, updateMetrics)
 	mux.HandleFunc(`/`, notFound)
