@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	metrics "github.com/Foga2H/go-musthave-metrics/internal/model"
-	storageInterface "github.com/Foga2H/go-musthave-metrics/internal/storage"
-	"github.com/Foga2H/go-musthave-metrics/internal/storage/memory"
+	storageInterface "github.com/Foga2H/go-musthave-metrics/internal/storage/server"
+	"github.com/Foga2H/go-musthave-metrics/internal/storage/server/memory"
 )
 
 var storage storageInterface.Storage
@@ -48,6 +49,7 @@ func updateMetrics(res http.ResponseWriter, req *http.Request) {
 	}
 
 	storage.Set(typeField, valueField)
+	fmt.Printf("Got metrics for type: %s, metric: %s, value: %s\n", typeField, metricField, valueField)
 
 	res.WriteHeader(http.StatusOK)
 }
@@ -59,7 +61,7 @@ func notFound(res http.ResponseWriter, req *http.Request) {
 
 func main() {
 	mux := http.NewServeMux()
-	storage = memory.NewMemStorage()
+	storage = server.NewMemStorage()
 
 	mux.HandleFunc(`/update/{type}/{metric}/{value}`, updateMetrics)
 	mux.HandleFunc(`/`, notFound)

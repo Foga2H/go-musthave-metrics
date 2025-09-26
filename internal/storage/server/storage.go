@@ -1,4 +1,4 @@
-package storage
+package server
 
 type Storage interface {
 	Set(key string, value string)

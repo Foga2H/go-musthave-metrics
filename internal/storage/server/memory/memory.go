@@ -1,4 +1,4 @@
-package memory
+package server
 
 type MemStorage struct {
 	metrics map[string]string
